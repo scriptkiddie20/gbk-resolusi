@@ -17,7 +17,9 @@
 								<div class="text-center">
 									<h1 class="h4 text-gray-900 mb-4"><?= esc($title) ?></h1>
 								</div>
-								<form action="/auth/login" class="user">
+								<?= session()->getFlashdata('message'); ?>
+								<?= $validation->listErrors() ?>
+								<form action="/auth" class="user" method="post">
 									<div class="form-group">
 										<input type="email" class="form-control form-control-user" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter Email Address...">
 									</div>

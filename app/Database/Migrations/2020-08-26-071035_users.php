@@ -17,8 +17,10 @@ class Users extends Migration
 		$forge->addField(
 			[
 				'id_roles' => [
-					'type'           	=> 'INT',
-					'unsigned'       	=> TRUE,
+					'type'           => 'INT',
+					'constraint'     => 11,
+					'unsigned'       => TRUE,
+					'auto_increment' => TRUE,
 				],
 				'role' => [
 					'type' => 'VARCHAR',

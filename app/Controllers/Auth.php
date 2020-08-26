@@ -2,16 +2,30 @@
 
 namespace App\Controllers;
 
+use App\Models\UsersModel;
+
 class Auth extends BaseController
 {
     public function index()
     {
-        $validation = \Config\Services::validation();
-        $data = [
-            'title' => 'Yahir Login'
-        ];
-
-        if (!$validation->run($data, 'auth')) {
+        if (!$this->validate([
+            'email' => [
+                'rules'  => 'required|valid_email',
+                'errors' => [
+                    'required' => 'Kamu wajib mengisi {field}.'
+                ]
+            ],
+            'password'    => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Kamu wajib mengisi {field}.'
+                ]
+            ],
+        ])) {
+            $data = [
+                'title' => 'Yahir Login',
+                'validation' => \Config\Services::validation()
+            ];
             return view('auth/index', $data);
         } else {
             // validasinya success
@@ -21,42 +35,41 @@ class Auth extends BaseController
 
     private function _login()
     {
-        $db = db_connect();
+        $model = new UsersModel;
 
-        $db->table('users')->getWhere()->getRowArray();
-
-        $email = $this->request->getVar('email');
+        $email = 'aceng@gmail.com';
         $password = $this->request->getVar('password');
 
-        $user = $this->db->get_where('user', ['email' => $email])->row_array();
+        $user = $model->getUsers($email);
 
         // jika usernya ada
         if ($user) {
             // jika usernya aktif
             if ($user['is_active'] == 1) {
                 // cek password
-                if (password_verify($password, $user['password'])) {
+                if ($user['password'] == $password) {
                     $data = [
                         'email' => $user['email'],
-                        'role_id' => $user['role_id']
+                        'role_id' => $user['roles_id']
                     ];
-                    $this->session->set_userdata($data);
+                    $this->session->set($data);
+                    dd('Success');
                     if ($user['role_id'] == 1) {
-                        redirect('admin');
+                        redirect()->to('admin');
                     } else {
-                        redirect('user');
+                        redirect()->to('user');
                     }
                 } else {
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Wrong password!</div>');
-                    redirect('auth');
+                    $this->session->setFlashdata('message', '<div class="alert alert-danger" role="alert">Wrong password!</div>');
+                    redirect()->to('/login');
                 }
             } else {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">This email has not been activated!</div>');
-                redirect('auth');
+                $this->session->setFlashdata('message', '<div class="alert alert-danger" role="alert">This email has not been activated!</div>');
+                redirect()->to('/login');
             }
         } else {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Email is not registered!</div>');
-            redirect('auth');
+            $this->session->setFlashdata('message', '<div class="alert alert-danger" role="alert">Email is not registered!</div>');
+            redirect()->to('/login');
         }
     }
 
