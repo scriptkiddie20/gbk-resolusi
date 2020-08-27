@@ -35,19 +35,4 @@ class Validation
 	//--------------------------------------------------------------------
 	// Rules
 	//--------------------------------------------------------------------
-
-	public $auth = [
-		'email' => [
-			'rules'  => 'required',
-			'errors' => [
-				'required' => 'Kamu wajib mengisi {field}.'
-			]
-		],
-		'password'    => [
-			'rules'  => 'required|valid_email',
-			'errors' => [
-				'required' => 'Kamu wajib mengisi {field}.'
-			]
-		],
-	];
 }
