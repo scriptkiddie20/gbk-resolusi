@@ -32,14 +32,19 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 
+
 $routes->get('/admin', 'Admin\Dashboard::index');
 $routes->get('/user', 'Users\Dashboard::index');
+$routes->get('/packages', 'Users\Packages::index');
+$routes->get('/packages/(:any)', 'Users\Packages::detail/$1');
+$routes->get('/products', 'Users\Products::index');
 
 
-$routes->get('/', 'Auth::index');
 $routes->get('/login', 'Auth::login');
 $routes->get('/register', 'Auth::register');
 
+$routes->get('/', 'Users\Landing::index');
+// $routes->get('/(:segment)', 'Users\Landing::index');
 /**
  * --------------------------------------------------------------------
  * Additional Routing
