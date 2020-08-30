@@ -5,33 +5,34 @@ namespace App\Database\Seeds;
 use CodeIgniter\Database\Seeder;
 use CodeIgniter\I18n\Time;
 
-class FirstInsert extends Seeder
+class Users_seeder extends Seeder
 {
 	public function run()
 	{
+		$time = new Time;
 		$role = [
 			[
 				'role' => 'Admin',
-				'created_at' => Time::now(),
-				'updated_at' => Time::now(),
+				'created_at' => $time->toDateTimeString(),
+				'updated_at' => $time->toDateTimeString(),
 			],
 			[
 				'role' => 'User',
-				'created_at' => Time::now(),
-				'updated_at' => Time::now(),
+				'created_at' => $time->toDateTimeString(),
+				'updated_at' => $time->toDateTimeString(),
 			],
 		];
 
 		$menu = [
 			[
 				'menu' => 'Admin',
-				'created_at' => Time::now(),
-				'updated_at' => Time::now(),
+				'created_at' => $time->toDateTimeString(),
+				'updated_at' => $time->toDateTimeString(),
 			],
 			[
 				'menu' => 'User',
-				'created_at' => Time::now(),
-				'updated_at' => Time::now(),
+				'created_at' => $time->toDateTimeString(),
+				'updated_at' => $time->toDateTimeString(),
 			]
 		];
 
@@ -39,20 +40,20 @@ class FirstInsert extends Seeder
 			[
 				'roles_id' 	 => 1,
 				'menus_id' 	 => 1,
-				'created_at' => Time::now(),
-				'updated_at' => Time::now(),
+				'created_at' => $time->toDateTimeString(),
+				'updated_at' => $time->toDateTimeString(),
 			],
 			[
 				'roles_id' 	 => 1,
 				'menus_id' 	 => 2,
-				'created_at' => Time::now(),
-				'updated_at' => Time::now(),
+				'created_at' => $time->toDateTimeString(),
+				'updated_at' => $time->toDateTimeString(),
 			],
 			[
 				'roles_id' 	 => 2,
 				'menus_id' 	 => 2,
-				'created_at' => Time::now(),
-				'updated_at' => Time::now(),
+				'created_at' => $time->toDateTimeString(),
+				'updated_at' => $time->toDateTimeString(),
 			],
 		];
 
@@ -63,8 +64,8 @@ class FirstInsert extends Seeder
 				'url' => '/admin',
 				'icon' => 'fas fa-fw fa-tachometer-alt',
 				'is_active' => 1,
-				'created_at' => Time::now(),
-				'updated_at' => Time::now(),
+				'created_at' => $time->toDateTimeString(),
+				'updated_at' => $time->toDateTimeString(),
 			],
 			[
 				'menus_id' => 2,
@@ -72,8 +73,8 @@ class FirstInsert extends Seeder
 				'url' => '/packages',
 				'icon' => 'fas fa-fw fa-box-open',
 				'is_active' => 1,
-				'created_at' => Time::now(),
-				'updated_at' => Time::now(),
+				'created_at' => $time->toDateTimeString(),
+				'updated_at' => $time->toDateTimeString(),
 			],
 		];
 
