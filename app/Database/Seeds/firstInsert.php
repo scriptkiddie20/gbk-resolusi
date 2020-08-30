@@ -68,7 +68,7 @@ class FirstInsert extends Seeder
 			],
 			[
 				'menus_id' => 2,
-				'title' => 'Packages',
+				'title' => 'Paket Usaha',
 				'url' => '/packages',
 				'icon' => 'fas fa-fw fa-box-open',
 				'is_active' => 1,
