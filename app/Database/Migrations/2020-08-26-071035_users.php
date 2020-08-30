@@ -29,6 +29,10 @@ class Users extends Migration
 				'created_at' => [
 					'type' => 'DATETIME',
 					'null' => TRUE
+				],
+				'updated_at' => [
+					'type' => 'DATETIME',
+					'null' => TRUE
 				]
 			]
 		);
@@ -45,7 +49,11 @@ class Users extends Migration
 					'unsigned'       => TRUE,
 					'auto_increment' => TRUE,
 				],
-				'name' => [
+				'firstName' => [
+					'type'           => 'VARCHAR',
+					'constraint'     => 128
+				],
+				'lastName' => [
 					'type'           => 'VARCHAR',
 					'constraint'     => 128
 				],
@@ -100,6 +108,10 @@ class Users extends Migration
 				'created_at' => [
 					'type' => 'DATETIME',
 					'null' => TRUE
+				],
+				'updated_at' => [
+					'type' => 'DATETIME',
+					'null' => TRUE
 				]
 			]
 		);
@@ -140,6 +152,10 @@ class Users extends Migration
 				'created_at' => [
 					'type' => 'DATETIME',
 					'null' => TRUE
+				],
+				'updated_at' => [
+					'type' => 'DATETIME',
+					'null' => TRUE
 				]
 			]
 		);
@@ -170,6 +186,10 @@ class Users extends Migration
 				'created_at' => [
 					'type' => 'DATETIME',
 					'null' => TRUE
+				],
+				'updated_at' => [
+					'type' => 'DATETIME',
+					'null' => TRUE
 				]
 			]
 		);
@@ -197,6 +217,10 @@ class Users extends Migration
 					'constraint' => 254,
 				],
 				'created_at' => [
+					'type' => 'DATETIME',
+					'null' => TRUE
+				],
+				'updated_at' => [
 					'type' => 'DATETIME',
 					'null' => TRUE
 				]

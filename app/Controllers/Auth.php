@@ -2,13 +2,17 @@
 
 namespace App\Controllers;
 
-use App\Models\UsersModel;
+use App\Models\UserModel;
+use App\Models\UserTokenModel;
 use CodeIgniter\I18n\Time;
 
 class Auth extends BaseController
 {
     public function index()
     {
+        if (session('email')) {
+            return redirect()->to('/user');
+        }
 
         $data = [
             'title' => 'Yahir Login',
@@ -19,21 +23,12 @@ class Auth extends BaseController
 
     public function login()
     {
+        $validation = [
+            'email' => $this->request->getVar('email'),
+            'password' => $this->request->getVar('password')
+        ];
 
-        if (!$this->validate([
-            'email' => [
-                'rules'  => 'required|valid_email',
-                'errors' => [
-                    'required' => 'Kamu wajib mengisi {field}.'
-                ]
-            ],
-            'password'    => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Kamu wajib mengisi {field}.'
-                ]
-            ],
-        ])) {
+        if (!$this->validation->run($validation, 'signin')) {
             return redirect()->to('/auth')->withInput();
         }
 
@@ -41,10 +36,139 @@ class Auth extends BaseController
         // validasinya success
     }
 
+    public function register()
+    {
+        if (session('email')) {
+            return redirect()->to('/user');
+        }
+
+        $data = [
+            'title' => 'Register Yahir Account',
+            'validation' => \Config\Services::validation()
+        ];
+        return view('auth/register', $data);
+    }
+
+    public function regist()
+    {
+        $userModel = new UserModel();
+        $userTokenModel = new UserTokenModel();
+
+        $validation = [
+            'firstName' => $this->request->getVar('firstName'),
+            'lastName' => $this->request->getVar('lastName'),
+            'email' => $this->request->getVar('email'),
+            'pass1' => $this->request->getVar('pass1'),
+            'pass2' => $this->request->getVar('pass2'),
+        ];
+
+        if (!$this->validation->run($validation, 'signup')) {
+            return redirect()->to('/register')->withInput();
+        }
+
+        $email = htmlspecialchars($this->request->getVar('email'));
+        $userData = [
+            'firstName' => htmlspecialchars($this->request->getVar('firstName')),
+            'lastName' => htmlspecialchars($this->request->getVar('lastName')),
+            'email' => $email,
+            'image' => 'default.jpg',
+            'password' => password_hash($this->request->getVar('pass1'), PASSWORD_DEFAULT),
+            'roles_id' => 2,
+            'is_active' => 0,
+        ];
+
+        // siapkan token
+        $token = base64_encode(random_bytes(32));
+        $userToken = [
+            'email' => $email,
+            'token' => $token,
+        ];
+
+        $userTokenModel->save($userToken);
+        $userModel->save($userData);
+
+        return $this->_sendEmail($token, 'verify');
+    }
+
+    public function verify()
+    {
+        $userModel = new UserModel();
+        $userTokenModel = new UserTokenModel();
+
+        $email = $this->request->getGet('email');
+        $token = $this->request->getGet('token');
+
+        $userData = $userModel->getUsers($email);
+        $userToken = $userTokenModel->getToken($token);
+
+        if ($userData) {
+
+            if ($userToken) {
+                if (strtotime(Time::now()) - strtotime($userToken['created_at']) < (60 * 60 * 24)) {
+
+                    $userModel->is_active($email);
+                    $userTokenModel->delete(['email' => $email]);
+                    // $this->db->delete('user_token', ['email' => $email]);
+
+                    $this->session->setFlashdata('message', '<div class="alert alert-success" role="alert">' . $email . ' has been activated! Please login.</div>');
+                    return redirect()->to('/auth');
+                } else {
+                    $userModel->delete(['email' => $email]);
+                    $userTokenModel->delete(['email' => $email]);
+
+                    $this->session->setFlashdata('message', '<div class="alert alert-danger" role="alert">Account activation failed! Token expired.</div>');
+                    return redirect()->to('/auth');
+                }
+            } else {
+                $this->session->setFlashdata('message', '<div class="alert alert-danger" role="alert">Account activation failed! Wrong token.</div>');
+                return redirect()->to('/auth');
+            }
+        } else {
+            $this->session->setFlashdata('message', '<div class="alert alert-danger" role="alert">Account activation failed! Wrong email.</div>');
+            return redirect()->to('auth');
+        }
+    }
+
+    public function logout()
+    {
+        $this->session->remove('email', 'roles_id');
+
+        $this->session->setFlashdata('message', '<div class="alert alert-success" role="alert">You have been logged out!</div>');
+        return redirect()->to('/auth');
+    }
+
+    private function _sendEmail($token, $type)
+    {
+
+        $email   = \Config\Services::email();
+        $to      = 'acengkusmana2016@gmail.com';
+
+        $email->setTo($to);
+        $email->setFrom('wasender2020@gmail.com', 'Yahir');
+
+        // send message
+        if ($type == 'verify') {
+            $email->setSubject('Account Verification');
+            $email->setMessage('Click this link to verify you account : {unwrap}<a href="' . base_url() . '/auth/verify?email=' . $this->request->getVar('email') . '&token=' . urlencode($token) . '">Activate</a>{/unwrap}');
+        } else if ($type == 'forgot') {
+            $email->setSubject('Reset Password');
+            $email->setMessage('Click this link to reset your password : <a href="' . base_url() . '/auth/resetpassword?email=' . $this->request->getVar('email') . '&token=' . urlencode($token) . '">Reset Password</a>');
+        }
+
+        // send email
+        if ($email->send()) {
+            $this->session->setFlashdata('message', '<div class="alert alert-success" role="alert">Congratulation! your account has been created. Please activate your account</div>');
+            return redirect()->to('/auth');
+        } else {
+            $data = $email->printDebugger(['header']);
+            print_r($data);
+            die;
+        }
+    }
 
     private function _login()
     {
-        $model = new UsersModel;
+        $model = new UserModel;
 
         $email = $this->request->getVar('email');
         $password = $this->request->getVar('password');
@@ -80,121 +204,6 @@ class Auth extends BaseController
             $this->session->setFlashdata('message', '<div class="alert alert-danger" role="alert">Email is not registered!</div>');
             return redirect()->to('/auth')->withInput();
         }
-    }
-
-    public function register()
-    {
-        $data = [
-            'title' => 'Register Yahir Account',
-            'validation' => \Config\Services::validation()
-        ];
-        return view('auth/register', $data);
-
-
-
-
-
-
-
-
-
-
-        // $this->form_validation->set_rules('name', 'Name', 'required|trim');
-        // $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]', [
-        //     'is_unique' => 'This email has already registered!'
-        // ]);
-        // $this->form_validation->set_rules('password1', 'Password', 'required|trim|min_length[3]|matches[password2]', [
-        //     'matches' => 'Password dont match!',
-        //     'min_length' => 'Password too short!'
-        // ]);
-        // $this->form_validation->set_rules('password2', 'Password', 'required|trim|matches[password1]');
-
-        // if ($this->form_validation->run() == false) {
-        //     $data['title'] = 'WPU User Registration';
-        //     $this->load->view('templates/auth_header', $data);
-        //     $this->load->view('auth/registration');
-        //     $this->load->view('templates/auth_footer');
-        // } else {
-        //     $email = $this->input->post('email', true);
-        //     $data = [
-        //         'name' => htmlspecialchars($this->input->post('name', true)),
-        //         'email' => htmlspecialchars($email),
-        //         'image' => 'default.jpg',
-        //         'password' => password_hash($this->input->post('password1'), PASSWORD_DEFAULT),
-        //         'role_id' => 2,
-        //         'is_active' => 0,
-        //         'date_created' => time()
-        //     ];
-
-        //     // siapkan token
-        //     $token = base64_encode(random_bytes(32));
-        //     $user_token = [
-        //         'email' => $email,
-        //         'token' => $token,
-        //         'date_created' => time()
-        //     ];
-
-        //     $this->db->insert('user', $data);
-        //     $this->db->insert('user_token', $user_token);
-
-        //     $this->_sendEmail($token, 'verify');
-
-        //     $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Congratulation! your account has been created. Please activate your account</div>');
-        //     redirect('auth');
-    }
-
-    public function regist()
-    {
-        $model = new UsersModel();
-
-        if (!$this->validate(
-            [
-                'firstName' => [
-                    'rules'  => 'required',
-                    'errors' => [
-                        'required' => 'Kamu wajib mengisi {field}.'
-                    ]
-                ],
-                'lastName' => [
-                    'rules'  => 'required',
-                    'errors' => [
-                        'required' => 'Kamu wajib mengisi {field}.'
-                    ]
-                ],
-                'email' => [
-                    'rules'  => 'required',
-                    'errors' => [
-                        'required' => 'Kamu wajib mengisi {field}.'
-                    ]
-                ],
-                'pass1' => [
-                    'rules'  => 'required',
-                    'errors' => [
-                        'required' => 'Kamu wajib mengisi {field}.'
-                    ]
-                ],
-                'pass2' => [
-                    'rules'  => 'required',
-                    'errors' => [
-                        'required' => 'Kamu wajib mengisi {field}.'
-                    ]
-                ],
-            ]
-        )) {
-            return redirect()->to('/register')->withInput();
-        }
-
-        $data = [
-            'name' => $this->request->getVar('firstName'),
-            'email' => $this->request->getVar('email'),
-            'image' => 'default.jpg',
-            'password' => password_hash($this->request->getVar('pass1'), PASSWORD_DEFAULT),
-            'roles_id' => 2,
-            'is_active' => 1,
-        ];
-
-        $model->save($data);
-        return redirect()->to('/admin');
     }
 
     //--------------------------------------------------------------------

@@ -33,6 +33,7 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 
 $routes->get('/admin', 'Admin\Dashboard::index');
+$routes->get('/user', 'Users\Dashboard::index');
 
 
 $routes->get('/', 'Auth::index');

@@ -12,25 +12,39 @@
 						<div class="text-center">
 							<h1 class="h4 text-gray-900 mb-4"><?= esc($title); ?></h1>
 						</div>
-						<?= $validation->listErrors(); ?>
 						<form action="/auth/regist" method="post" class="user">
 							<div class="form-group row">
 								<div class="col-sm-6 mb-3 mb-sm-0">
-									<input type="text" class="form-control form-control-user" id="firstName" name="firstName" placeholder="First Name">
+									<input type="text" class="form-control form-control-user <?= ($validation->hasError('firstName') ? 'is-invalid' : '') ?>" id="firstName" name="firstName" placeholder="First Name">
+									<div class="invalid-feedback">
+										<?= $validation->getError('firstName') ?>
+									</div>
 								</div>
 								<div class="col-sm-6">
-									<input type="text" class="form-control form-control-user" id="lastName" name="lastName" placeholder="Last Name">
+									<input type="text" class="form-control form-control-user <?= ($validation->hasError('lastName') ? 'is-invalid' : '') ?>" id="lastName" name="lastName" placeholder="Last Name">
+									<div class="invalid-feedback">
+										<?= $validation->getError('lastName') ?>
+									</div>
 								</div>
 							</div>
 							<div class="form-group">
-								<input type="email" class="form-control form-control-user" id="email" name="email" placeholder="Email Address">
+								<input type="email" class="form-control form-control-user <?= ($validation->hasError('email') ? 'is-invalid' : '') ?>" id="email" name="email" placeholder="Email Address">
+								<div class="invalid-feedback">
+									<?= $validation->getError('email') ?>
+								</div>
 							</div>
 							<div class="form-group row">
 								<div class="col-sm-6 mb-3 mb-sm-0">
-									<input type="password" class="form-control form-control-user" id="pass1" name="pass1" placeholder="Password">
+									<input type="password" class="form-control form-control-user <?= ($validation->hasError('pass1') ? 'is-invalid' : '') ?>" id="pass1" name="pass1" placeholder="Password">
+									<div class="invalid-feedback">
+										<?= $validation->getError('pass1') ?>
+									</div>
 								</div>
 								<div class="col-sm-6">
-									<input type="password" class="form-control form-control-user" id="pass2" name="pass2" placeholder="Repeat Password">
+									<input type="password" class="form-control form-control-user <?= ($validation->hasError('pass2') ? 'is-invalid' : '') ?>" id="pass2" name="pass2" placeholder="Repeat Password">
+									<div class="invalid-feedback">
+										<?= $validation->getError('pass2') ?>
+									</div>
 								</div>
 							</div>
 							<button type="submit" class="btn btn-primary btn-user btn-block">
@@ -42,7 +56,7 @@
 							<a class="small" href="forgot-password.html">Forgot Password?</a>
 						</div>
 						<div class="text-center">
-							<a class="small" href="/login">Already have an account? Login!</a>
+							<a class="small" href="/auth">Already have an account? Login!</a>
 						</div>
 					</div>
 				</div>
