@@ -17,7 +17,7 @@ if (file_exists(SYSTEMPATH . 'Config/Routes.php')) {
  * --------------------------------------------------------------------
  */
 $routes->setDefaultNamespace('App\Controllers');
-$routes->setDefaultController('Home');
+$routes->setDefaultController('Landing');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
 $routes->set404Override();
@@ -33,6 +33,7 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 
 
+$routes->get('/', 'Landing::index');
 $routes->get('/admin', 'Admin\Dashboard::index');
 $routes->get('/user', 'Users\Dashboard::index');
 $routes->get('/packages', 'Users\Packages::index');
@@ -43,8 +44,9 @@ $routes->get('/products', 'Users\Products::index');
 $routes->get('/login', 'Auth::login');
 $routes->get('/register', 'Auth::register');
 
-$routes->get('/', 'Users\Landing::index');
-// $routes->get('/(:segment)', 'Users\Landing::index');
+$routes->get('/cs/(:segment)', 'Landing::cs');
+
+$routes->add('/orderpaket', 'Landing::orderpaket');
 /**
  * --------------------------------------------------------------------
  * Additional Routing

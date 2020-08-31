@@ -16,6 +16,7 @@ class Packages extends BaseController
 
     public function index()
     {
+        dd($this->request->getVar());
         if (is_logged_in()) {
             return is_logged_in();
         }

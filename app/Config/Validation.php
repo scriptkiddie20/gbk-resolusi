@@ -94,4 +94,37 @@ class Validation
 			]
 		]
 	];
+
+	public $orderpaket = [
+		'paket' => [
+			'label' => 'Paket',
+			'rules' => 'required',
+			'errors' => [
+				'required' => 'Silakan pilih {field} terlebih dahulu..'
+			]
+		],
+		'nama' => [
+			'label' => 'Nama',
+			'rules' => 'required',
+			'errors' => [
+				'required' => 'Kolom {field} wajib diisi kaka :)'
+			]
+		],
+		'phone' => [
+			'label' => 'No hp',
+			'rules' => 'required|min_length[10]',
+			'errors' => [
+				'required' => 'Kolom {field} wajib diisi kaka :)',
+				'min_length' => 'Kolom {field} harus sesuai kak.'
+			]
+		],
+		'alamat' => [
+			'label' => 'Alamat',
+			'rules' => 'required|min_length[10]',
+			'errors' => [
+				'required' => 'Kolom {field} wajib diisi kaka :)',
+				'min_length' => 'Kolom {field} harus sesuai kak.'
+			]
+		],
+	];
 }

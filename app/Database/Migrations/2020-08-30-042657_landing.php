@@ -22,6 +22,10 @@ class Landing_seeder extends Migration
 				'unsigned'       => TRUE,
 				'auto_increment' => TRUE,
 			],
+			'code' => [
+				'type'           => 'VARCHAR',
+				'constraint'     => 128,
+			],
 			'nama' => [
 				'type'           => 'VARCHAR',
 				'constraint'     => 128,

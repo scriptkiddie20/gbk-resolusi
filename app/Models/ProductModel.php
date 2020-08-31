@@ -11,19 +11,12 @@ class ProductModel extends Model
     protected $allowedFields = [];
     protected $useTimestamps = true;
 
-    function getProducts($id_packages = false)
+    function getProducts()
     {
         $db = db_connect();
-        if ($id_packages == false) {
-            $query = $db->table($this->table)
-                ->join('categories', 'id_categories=categories_id')
-                ->join('packages', 'id_packages=packages_id')
-                ->get();
-            return $query->getResultArray();
-        } else {
-            $query = $db->table($this->table)
-                ->getWhere(['packages_id' => $id_packages]);
-            return $query->getResultArray();
-        }
+        $query = $db->table($this->table)
+            ->join('categories', 'categories_id=id_categories')
+            ->where(['category' => 'pakaian anak'])->where(['packages_id' => 3])->get();
+        return $query->getResultArray();
     }
 }
