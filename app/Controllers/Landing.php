@@ -7,6 +7,7 @@ use App\Models\CustomerModel;
 use App\Models\OrderModel;
 use App\Models\ProductModel;
 use App\Models\PackageModel;
+use CodeIgniter\CodeIgniter;
 
 class Landing extends BaseController
 {
@@ -42,6 +43,11 @@ class Landing extends BaseController
             'cs' => $packages->getCs($cs),
             'validation' => $this->validation
         ];
+
+        if (empty($data['cs'])) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('Halaman tidak ditemukan !');
+        }
+
         return view('user/landing', $data);
     }
 

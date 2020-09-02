@@ -3,6 +3,7 @@
 namespace App\Controllers\Users;
 
 use App\Controllers\BaseController;
+use App\Models\PackageModel;
 use App\Models\ProductModel;
 use App\Models\UserMenuModel;
 
@@ -16,18 +17,16 @@ class Packages extends BaseController
 
     public function index()
     {
-        dd($this->request->getVar());
         if (is_logged_in()) {
             return is_logged_in();
         }
 
-        $model = new ProductModel();
-        // dd($model->getProducts());
+        $model = new PackageModel();
         $data = [
             'title' => 'Paket Usaha',
             'menu'  => $this->menu->getMenu(),
             'subMenu' => $this->menu->subMenu(),
-            'product' => $model->getProducts()
+            'packages' => $model->packages()
         ];
         return view('user/package', $data);
     }
@@ -35,13 +34,23 @@ class Packages extends BaseController
     public function detail($id)
     {
         $model = new ProductModel();
-        dd($model->getProducts($id));
         $data = [
             'title' => 'Paket Usaha',
             'menu'  => $this->menu->getMenu(),
             'subMenu' => $this->menu->subMenu(),
-            'product' => $model->getProducts()
+            'products' => $model->products($id)
         ];
-        return view('user/package', $data);
+
+        if (empty($data['products'])) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Halaman ini tidak ditemukan !");
+        }
+        return view('user/package_detail', $data);
+    }
+
+    public function delete($id)
+    {
+        $model = new ProductModel();
+        $model->delete($id);
+        return redirect()->back();
     }
 }

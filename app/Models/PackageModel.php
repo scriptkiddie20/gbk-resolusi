@@ -11,6 +11,11 @@ class PackageModel extends Model
     protected $allowedFields = [];
     protected $useTimestamps = true;
 
+    function packages()
+    {
+        return $this->join('categories', 'categories_id=id_categories')->findAll();
+    }
+
     function getPackages()
     {
         $db = db_connect();

@@ -37,7 +37,8 @@ $routes->get('/', 'Landing::index');
 $routes->get('/admin', 'Admin\Dashboard::index');
 $routes->get('/user', 'Users\Dashboard::index');
 $routes->get('/packages', 'Users\Packages::index');
-$routes->get('/packages/(:any)', 'Users\Packages::detail/$1');
+$routes->get('/packages/(:num)', 'Users\Packages::detail/$1');
+$routes->delete('/packages/delete/(:num)', 'Users\Packages::delete/$1');
 $routes->get('/products', 'Users\Products::index');
 
 

@@ -8,3 +8,11 @@
     background-size: cover;
     background-position: center center;
 }
+
+.table>tbody>tr>* {
+    vertical-align: middle;
+}
+
+.sampul {
+    width: 100px;
+}

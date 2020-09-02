@@ -11,6 +11,11 @@ class ProductModel extends Model
     protected $allowedFields = [];
     protected $useTimestamps = true;
 
+    function products($id)
+    {
+        return $this->where(['packages_id' => $id])->findAll();
+    }
+
     function getProducts()
     {
         $db = db_connect();
