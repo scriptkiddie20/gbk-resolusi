@@ -8,7 +8,7 @@ class LeadsModel extends Model
 {
     protected $primaryKey = 'id_leads';
     protected $table = 'leads';
-    // protected $allowedFields = ['sumbers_id', 'type_customers_id', 'nama', 'phone', 'address',];
+    protected $allowedFields = ['karyawan_id', 'lead_wa', 'lead_sms', 'lead_call'];
     protected $useTimestamps = true;
 
     protected $column_search = ['karyawan_id', 'lead_wa', 'lead_sms', 'lead_call'];
@@ -42,10 +42,6 @@ class LeadsModel extends Model
             } else {
                 $this->dt->orLike($search, $request->getPost('search')['value']);
             }
-
-            // if ($jenkel != null) {
-            //     $this->dt->orLike($search, $jenkel);
-            // }
 
             if (count($this->column_search) - 1 == $i) {
                 $this->dt->groupEnd();

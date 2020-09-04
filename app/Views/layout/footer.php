@@ -47,31 +47,28 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal_title">Barang</h5>
+                <h5 class="modal-title" id="modal_title">Data Leads</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body form">
                 <form action="#" id="form">
-                    <input type="hidden" value="" name="id" />
+                    <input type="hidden" value="" name="id_leads" />
                     <div class="form-body">
                         <div class="form-group">
-                            <label class="control-label">Nama Barang</label>
-                            <input name="nama_barang" class="form-control" type="text">
+                            <label class="control-label">Leads WA</label>
+                            <input name="leads_wa" class="form-control" type="text">
                             <span class="invalid-feedback"></span>
                         </div>
                         <div class="form-group">
-                            <label class="control-label">Stok</label>
-                            <input name="stok" class="form-control" type="text">
+                            <label class="control-label">Leads SMS</label>
+                            <input name="leads_sms" class="form-control" type="text">
                             <span class="invalid-feedback"></span>
                         </div>
                         <div class="form-group">
-                            <label class="control-label">Kategori</label>
-                            <select name="kategori" class="form-control">
-                                <option value="">-- Pilh --</option>
-
-                            </select>
+                            <label class="control-label">Leads CALL</label>
+                            <input name="leads_call" class="form-control" type="text">
                             <span class="invalid-feedback"></span>
                         </div>
                     </div>

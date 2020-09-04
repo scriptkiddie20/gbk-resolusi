@@ -182,6 +182,7 @@ class Auth extends BaseController
                 // cek password
                 if (password_verify($password, $user['password'])) {
                     $session = [
+                        'id_users' => $user['id_users'],
                         'email' => $user['email'],
                         'roles_id' => $user['roles_id']
                     ];

@@ -41,12 +41,13 @@
     <!-- Custom scripts for all pages-->
     <script src="/js/sb-admin-2.min.js"></script>
 
+    <!-- sweetalert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
     <!-- Page level plugins -->
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-    <!-- sweetalert -->
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <!-- custom js -->
     <script src="/js/yahir.js"></script>
@@ -72,9 +73,9 @@
                 }]
             })
 
-            $('#modal_form').on('shown.bs.modal', function(e) {
-                load_kategori();
-            });
+            // $('#modal_form').on('shown.bs.modal', function(e) {
+            //     load_kategori();
+            // });
 
             $('#modal_form').on('hidden.bs.modal', function(e) {
                 var inputs = $('#form input, #form textarea, #form select');
@@ -84,7 +85,7 @@
 
         function load_kategori() {
             $.ajax({
-                url: "<?= base_url('barang/getKategori') ?>",
+                url: "<?= base_url('leads/getKategori') ?>",
                 method: 'GET',
                 dataType: 'JSON',
                 success: function(categories) {
@@ -92,7 +93,7 @@
                     var opsi_kategori;
                     $('[name="kategori"]').html('');
                     $.each(categories, function(key, val) {
-                        opsi_kategori = `<option value="${val.id_kategori}">${val.kategori_barang}</option>`;
+                        opsi_kategori = `<option value="${val.id_categories}">${val.category}</option>`;
                         $('[name="kategori"]').append(opsi_kategori);
                     });
                 }
@@ -128,14 +129,16 @@
 
             //Ajax Load data from ajax
             $.ajax({
-                url: "<?= base_url('barang/edit/') ?>/" + id,
+                url: "<?= base_url('leads/edit/') ?>/" + id,
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
-                    $('[name="id"]').val(data.id_barang);
-                    $('[name="nama_barang"]').val(data.nama_barang);
-                    $('[name="stok"]').val(data.stok);
-                    $('[name="kategori"]').val(data.kategori_id);
+                    console.log(data.id_leads);
+                    $('[name="id_leads"]').val(data.id_leads);
+                    $('[name="leads_wa"]').val(data.lead_wa);
+                    $('[name="leads_sms"]').val(data.lead_sms);
+                    $('[name="leads_call"]').val(data.lead_call);
+
                     $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
                     $('.modal-title').text('Edit Barang'); // Set title to Bootstrap modal title
                 },
@@ -151,10 +154,10 @@
             var url, method;
 
             if (save_label == 'add') {
-                url = "<?= base_url('barang/add') ?>";
+                url = "<?= base_url('leads/add') ?>";
                 method = 'disimpan';
             } else {
-                url = "<?= base_url('barang/update') ?>";
+                url = "<?= base_url('leads/update') ?>";
                 method = 'diupdate';
             }
 
@@ -170,7 +173,7 @@
                     {
                         $('#modal_form').modal('hide');
                         reload_ajax();
-                        swalert(method);
+                        // swalert(method);
                     } else {
                         $.each(data.errors, function(key, value) {
                             $('[name="' + key + '"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
@@ -200,27 +203,15 @@
         }
 
         function hapus_barang(id) {
-            Swal({
-                title: 'Anda yakin?',
-                text: "Data barang akan dihapus!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Hapus data!'
-            }).then((result) => {
-                if (result.value) {
-                    $.ajax({
-                        url: "<?= base_url('barang/delete') ?>/" + id,
-                        type: "POST",
-                        success: function(data) {
-                            reload_ajax();
-                            swalert('dihapus');
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                            alert('Error deleting data');
-                        }
-                    });
+            $.ajax({
+                url: "<?= base_url('leads/delete') ?>/" + id,
+                type: "POST",
+                success: function(data) {
+                    reload_ajax();
+                    swalert('dihapus');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error deleting data');
                 }
             });
         }

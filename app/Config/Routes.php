@@ -46,6 +46,10 @@ $routes->get('/packages', 'Users\Packages::index');
 $routes->get('/packages/(:num)', 'Users\Packages::detail/$1');
 $routes->delete('/packages/delete/(:num)', 'Users\Packages::delete/$1');
 
+$routes->add('/leads/update', 'Users\Leads::update');
+$routes->add('/leads/edit/(:num)', 'Users\Leads::edit/$1');
+$routes->add('/leads/add', 'Users\Leads::add');
+$routes->add('/leads/delete/(:num)', 'Users\Leads::delete/$1');
 $routes->add('/leads/listdata', 'Users\Leads::listdata');
 $routes->get('/leads', 'Users\Leads::index');
 

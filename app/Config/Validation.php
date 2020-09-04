@@ -127,4 +127,28 @@ class Validation
 			]
 		],
 	];
+
+	public $leads = [
+		'leads_wa' => [
+			'label' => 'Leads WA',
+			'rules' => 'required',
+			'errors' => [
+				'required' => 'Silakan pilih {field} terlebih dahulu..'
+			]
+		],
+		'leads_sms' => [
+			'label' => 'Leads SMS',
+			'rules' => 'required',
+			'errors' => [
+				'required' => 'Silakan pilih {field} terlebih dahulu..'
+			]
+		],
+		'leads_call' => [
+			'label' => 'Leads Call',
+			'rules' => 'required',
+			'errors' => [
+				'required' => 'Silakan pilih {field} terlebih dahulu..'
+			]
+		],
+	];
 }
