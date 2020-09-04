@@ -34,21 +34,27 @@ $routes->setAutoRoute(true);
 
 
 $routes->get('/', 'Landing::index');
+$routes->add('/orderpaket', 'Landing::orderpaket');
+$routes->get('/cs/(:segment)', 'Landing::cs');
+
 $routes->get('/admin', 'Admin\Dashboard::index');
+
+$routes->get('/products', 'Users\Products::index');
+
 $routes->get('/user', 'Users\Dashboard::index');
-$routes->get('/leads', 'Users\Leads::index');
 $routes->get('/packages', 'Users\Packages::index');
 $routes->get('/packages/(:num)', 'Users\Packages::detail/$1');
 $routes->delete('/packages/delete/(:num)', 'Users\Packages::delete/$1');
-$routes->get('/products', 'Users\Products::index');
+
+$routes->add('/leads/listdata', 'Users\Leads::listdata');
+$routes->get('/leads', 'Users\Leads::index');
 
 
 $routes->get('/login', 'Auth::login');
 $routes->get('/register', 'Auth::register');
 
-$routes->get('/cs/(:segment)', 'Landing::cs');
 
-$routes->add('/orderpaket', 'Landing::orderpaket');
+
 /**
  * --------------------------------------------------------------------
  * Additional Routing

@@ -26,10 +26,5 @@ $(document).ready(function () {
                 items: 3
             }
         }
-
     });
-
-    // $('body').scrollspy({
-    //     target: '#dotted-scrollspy'
-    // });
 });
